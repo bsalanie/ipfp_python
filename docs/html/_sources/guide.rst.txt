@@ -1,7 +1,7 @@
 Guide
 =====
 
-:mod:`ipfp_python` contains Pyython implementations of the Iterative
+:mod:`ipfp_python` contains Python implementations of the Iterative
 Projection Fitting Procedure (IPFP) algorithm to solve for equilibrium
 and do comparative statics in several separable matching models 
 of the 

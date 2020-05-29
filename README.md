@@ -1,4 +1,4 @@
-
+# IPFP in Python
 
 `ipfp_python` contains Python implementations of the Iterative
 Projection Fitting Procedure (IPFP) algorithm to solve for equilibrium
@@ -13,8 +13,9 @@ for a general study.
 
 Please see the [html docs](docs/html/index.html)  or the [pdf manual](docs/ipfp_python.pdf) for more information.
 
-This package is released under the [MIT license](LICENSE.txt). I hope it is useful to you!
+This package is released under the [MIT license](LICENSE.txt). I hope it is useful to you.
 
 Bernard Salanié
+
 bsalanie at columbia.edu
 
