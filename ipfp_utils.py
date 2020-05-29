@@ -234,7 +234,7 @@ def der_nppow(a: np.array, b: Union[int, float, np.array]) -> np.array:
 
     if isinstance(b, (int, float)):
         a_pow_b = a ** b
-        return (b*a_pow_b/a, a_pow_b*log(b))
+        return (b*a_pow_b/a, a_pow_b*log(a))
     else:
         if a.shape != b.shape:
             print_stars(
