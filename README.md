@@ -11,7 +11,7 @@ with perfectly transferable
 utilities---see [Galichon and Salanié 2020](https://econ.columbia.edu/working-paper/cupids-invisible-hand-social-surplus-and-identification-in-matching-models-2/)
 for a general study.
 
-Please see the [html docs](docs/html/index.html)  or the [pdf manual](docs/ipfp_python.pdf) for more information.
+Please see the html docs  or the [pdf manual](docs/ipfp_python.pdf) for more information.
 
 This package is released under the [MIT license](LICENSE.txt). I hope it is useful to you.
 
