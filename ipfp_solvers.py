@@ -52,9 +52,12 @@ def ipfp_homo_nosingles_solver(Phi, men_margins, women_margins,
     ncat_men = men_margins.shape[0]
     ncat_women = women_margins.shape[0]
     n_couples = np.sum(men_margins)
+
+
     # check that there are as many men as women
     if np.abs(np.sum(women_margins) - n_couples) > n_couples * tol:
         print_stars(f"{ipfp_homo_nosingles_solver}: there should be as many men as women")
+
     if Phi.shape != (ncat_men, ncat_women):
         print_stars(
             f"ipfp_hetero_solver: the shape of Phi should be ({ncat_men}, {ncat_women}")
@@ -110,6 +113,7 @@ def ipfp_homo_nosingles_solver(Phi, men_margins, women_margins,
         # now fill the RHS
         n_cols_rhs = n_prod_categories
         rhs = np.zeros((n_sum_categories, n_cols_rhs))
+
         #  to compute derivatives of (txi, tyi) wrt Phi
         der_ephi2 = der_npexp(Phi / 2.0) / \
                     (2.0 * ephi2)  # 1/2 with safeguards
@@ -265,13 +269,11 @@ def ipfp_homo_solver(Phi, men_margins, women_margins, tol=1e-9,
         ivar = 0
         for iman in range(ncat_men):
             dt_man = dt[iman, :]
-            dmuxy[ivar:(ivar + ncat_women),
-            :] = np.outer((ephi2[iman, :] * tyi), dt_man)
+            dmuxy[ivar:(ivar + ncat_women), :] = np.outer((ephi2[iman, :] * tyi), dt_man)
             ivar += ncat_women
         for iwoman in range(ncat_women):
             dT_woman = dT[iwoman, :]
-            dmuxy[iwoman:n_prod_categories:ncat_women,
-            :] += np.outer((ephi2[:, iwoman] * txi), dT_woman)
+            dmuxy[iwoman:n_prod_categories:ncat_women, :] += np.outer((ephi2[:, iwoman] * txi), dT_woman)
         # add the term that comes from differentiating ephi2
         muxy_vec2 = (muxy * der_ephi2).reshape(n_prod_categories)
         dmuxy[:, n_sum_categories:] += np.diag(muxy_vec2)
@@ -352,125 +354,6 @@ def ipfp_hetero_solver(Phi, men_margins, women_margins, tau, tol=1e-9,
                                     sigma_x, tau_y, tol=tol, gr=False,
                                     maxiter=maxiter, verbose=verbose)
 
-        # nindivs = np.sum(men_margins) + np.sum(women_margins)
-    # bigc = nindivs / (ncat_men + ncat_women + 2.0 * np.sum(ephi2))
-    # # we use tx = mux0^(1/(1+tau)) and ty = mu0y^(tau/(1+tau))
-    # bigc1 = nppow(bigc, tau1)
-    # txi = np.full(ncat_men, bigc1)
-    # tyi = np.full(ncat_women, nppow(bigc1, tau))
-    # err_diff = bigc
-    # tol_diff = tol * bigc
-    # tol_newton = tol
-    # niter = 0
-    # while (err_diff > tol_diff) and (niter < maxiter):
-    #     # Newton iterates for men
-    #     sx = ephi2 @ tyi
-    #     err_newton = bigc
-    #     txin = txi.copy()
-    #     while err_newton > tol_newton:
-    #         txit = nppow(txin, tau)
-    #         errxi = txin * (txit + sx) - men_margins
-    #         err_newton = npmaxabs(errxi)
-    #         txin -= errxi / (taup * txit + sx)
-    #     tx = txin
-    #
-    #     # Newton iterates for women
-    #     sy = ephi2T @ tx
-    #     err_newton = bigc
-    #     tyin = tyi.copy()
-    #     while err_newton > tol_newton:
-    #         tyit = nppow(tyin, taui)
-    #         erryi = tyin * (tyit + sy) - women_margins
-    #         err_newton = npmaxabs(erryi)
-    #         tyin -= erryi / (taup1 * tyit + sy)
-    #     ty = tyin
-    #
-    #     err_x = npmaxabs(tx - txi)
-    #     err_y = npmaxabs(ty - tyi)
-    #     err_diff = err_x + err_y
-    #     txi = tx
-    #     tyi = ty
-    #     niter += 1
-    # mux0 = nppow(txi, taup)
-    # mu0y = nppow(tyi, taup1)
-    # muxy = ephi2 * np.outer(txi, tyi)
-    # marg_err_x = mux0 + np.sum(muxy, 1) - men_margins
-    # marg_err_y = mu0y + np.sum(muxy, 0) - women_margins
-    # if verbose:
-    #     print(f"After {niter} iterations:")
-    #     print(f"\tMargin error on x: {npmaxabs(marg_err_x)}")
-    #     print(f"\tMargin error on y: {npmaxabs(marg_err_y)}")
-    # if not gr:
-    #     return (muxy, mux0, mu0y), marg_err_x, marg_err_y
-    # else:  # we compute the derivatives
-    #     sxi = ephi2 @ tyi
-    #     syi = ephi2T @ txi
-    #     n_sum_categories = ncat_men + ncat_women
-    #     n_prod_categories = ncat_men * ncat_women
-    #
-    #     # start with the LHS of the linear system
-    #     lhs = np.zeros((n_sum_categories, n_sum_categories))
-    #     der_txi1, der_txi2 = der_nppow(txi, taup)
-    #     der_tyi1, der_tyi2 = der_nppow(tyi, taup1)
-    #     lhs[:ncat_men, :ncat_men] = np.diag(der_txi1 + sxi)
-    #     lhs[:ncat_men, ncat_men:] = ephi2 * txi.reshape((-1, 1))
-    #     lhs[ncat_men:, ncat_men:] = np.diag(der_tyi1 + syi)
-    #     lhs[ncat_men:, :ncat_men] = ephi2T * tyi.reshape((-1, 1))
-    #
-    #     # now fill the RHS (tau last)
-    #     n_cols_rhs = n_sum_categories + n_prod_categories + 1
-    #     rhs = np.zeros((n_sum_categories, n_cols_rhs))
-    #     #  to compute derivatives of (txi, tyi) wrt men_margins
-    #     rhs[:ncat_men, :ncat_men] = np.eye(ncat_men)
-    #     #  to compute derivatives of (txi, tyi) wrt women_margins
-    #     rhs[ncat_men:n_sum_categories,
-    #     ncat_men:n_sum_categories] = np.eye(ncat_women)
-    #     #  to compute derivatives of (txi, tyi) wrt Phi
-    #     # tau1 with safeguards
-    #     der_ephi2 = tau1 * der_npexp(Phi * tau1) / ephi2
-    #     ivar = n_sum_categories
-    #     for iman in range(ncat_men):
-    #         rhs[iman, ivar:(ivar + ncat_women)] = - \
-    #                                                   muxy[iman, :] * der_ephi2[iman, :]
-    #         ivar += ncat_women
-    #     ivar1 = ncat_men
-    #     ivar2 = n_sum_categories
-    #     for iwoman in range(ncat_women):
-    #         rhs[ivar1, ivar2:-1:ncat_women] = - \
-    #                                               muxy[:, iwoman] * der_ephi2[:, iwoman]
-    #         ivar1 += 1
-    #         ivar2 += 1
-    #     #  to compute derivatives of (txi, tyi) wrt tau
-    #     muphi = muxy * Phi
-    #     rhs[:ncat_men, -1] = -der_txi2 + tau1 * tau1 * np.sum(muphi, 1)
-    #     rhs[ncat_men:n_sum_categories, -1] = der_tyi2 * taui * taui \
-    #                                          + tau1 * tau1 * np.sum(muphi, 0)
-    #     # solve for the derivatives of txi and tyi
-    #     dt_dT = spla.solve(lhs, rhs)
-    #     dt = dt_dT[:ncat_men, :]
-    #     dT = dt_dT[ncat_men:, :]
-    #     # now construct the derivatives of the mus
-    #     dmux0 = dt * der_txi1.reshape((-1, 1))
-    #     dmux0[:, -1] += der_txi2
-    #     dmu0y = dT * der_tyi1.reshape((-1, 1))
-    #     dmu0y[:, -1] -= der_tyi2 * taui * taui
-    #     dmuxy = np.zeros((n_prod_categories, n_cols_rhs))
-    #     ivar = 0
-    #     for iman in range(ncat_men):
-    #         dt_man = dt[iman, :]
-    #         dmuxy[ivar:(ivar + ncat_women),
-    #         :] = np.outer((ephi2[iman, :] * tyi), dt_man)
-    #         ivar += ncat_women
-    #     for iwoman in range(ncat_women):
-    #         dT_woman = dT[iwoman, :]
-    #         dmuxy[iwoman:n_prod_categories:ncat_women,
-    #         :] += np.outer((ephi2[:, iwoman] * txi), dT_woman)
-    #     # add the term that comes from differentiating ephi2
-    #     muxy_vec2 = (muxy * der_ephi2).reshape(n_prod_categories)
-    #     dmuxy[:, n_sum_categories:-1] += np.diag(muxy_vec2)
-    #     # add the term that comes from tau
-    #     muphi_vec = muphi.reshape(n_prod_categories)
-    #     dmuxy[:, -1] -= muphi_vec * tau1 * tau1
 
 
 def ipfp_heteroxy_solver(Phi, men_margins, women_margins,
@@ -559,7 +442,6 @@ def ipfp_heteroxy_solver(Phi, men_margins, women_margins,
             muxy_in = ephi2 * np.power(out_xy, sumxy1)
             errxi = mux0_in + np.sum(muxy_in, 1) - men_margins
             err_newton = npmaxabs(errxi)
-            # print(f"men: {err_newton}")
             txin -= errxi / (sig_taumax * (mux0_in / sigma_x
                                            + np.sum(sumxy1 * muxy_in, 1)) / txin)
         tx = txin
@@ -576,7 +458,6 @@ def ipfp_heteroxy_solver(Phi, men_margins, women_margins,
             muxy_in = ephi2 * np.power(out_xy, sumxy1)
             erryi = mu0y_in + np.sum(muxy_in, 0) - women_margins
             err_newton = npmaxabs(erryi)
-            # print(f"women: {err_newton}")
             tyin -= erryi / (sigmax_tau * (mu0y_in / tau_y
                                            + np.sum(sumxy1 * muxy_in, 0)) / tyin)
 
