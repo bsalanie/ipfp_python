@@ -1,10 +1,24 @@
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import altair as alt
 import streamlit as st
 import plotly.express as px
 from ipfp_solvers import ipfp_homo_solver
 import random
+
+# style
+plt.style.use('seaborn')
+
+
+def plot_heatmap(mu, str_tit):
+    fig, ax = plt.subplots()
+    ax.matshow(mu, cmap="YlOrRd")
+    ax.set_title(str_tit)
+    # fig.set_size_inches([2, 2])
+    st.pyplot()
+
 
 st.title("Solving for matching equilibrium with IPFP")
 
@@ -13,57 +27,98 @@ st.markdown("This solves for equilibrium in a [Choo and Siow 2006](https://www.j
 
 st.header("Generating primitives for a marriage market")
 st.subheader("First, choose numbers of categories of men and women")
-ncat_men = st.slider("Number of categories of men", min_value=2, max_value=10)
-ncat_women = st.slider("Number of categories of women",  min_value=2, max_value=10)
+ncat_men = st.radio("Number of categories of men", [2, 3, 4])
+ncat_women = st.radio("Number of categories of women", [2, 3, 4])
 
-st.subheader("How many men and women in total?")
-nmen = st.slider("Total number of men", min_value=ncat_men, max_value=100)
-nwomen = st.slider("Total number of women", min_value=ncat_women, max_value=100)
-
-
-st.subheader("Let me allocate these men and women in categories")
-men_cats = np.array(random.choices(range(ncat_men), k=nmen))
 nx = np.zeros(ncat_men)
-for ix in range(ncat_men):
-    nx[ix] = np.sum(men_cats == ix)
-st.write("Here is the allocation of men")
-st.write(nx)
-women_cats = np.array(random.choices(range(ncat_women), k=nwomen))
 my = np.zeros(ncat_women)
-for iy in range(ncat_women):
-    my[iy] = np.sum(women_cats == iy) 
-st.write("Here is the allocation of women")
-st.write(my)
+st.subheader("Second, choose the numbers of men and women in each category")
+for iman in range(ncat_men):
+    nx[iman] = st.slider(f"Number of men in category {iman+1}",
+                         min_value=10, max_value=100, step=10)
+for iwoman in range(ncat_women):
+    my[iwoman] = st.slider(f"Number of women in category {iwoman+1}",
+                           min_value=10, max_value=100, step=10)
 
-st.subheader("OK, now we generate the joint surpluses from all potential couples")
+# st.subheader("Let me allocate these men and women in categories")
+# men_cats = np.array(random.choices(range(ncat_men), k=nmen))
+# nx = np.zeros(ncat_men)
+# for ix in range(ncat_men):
+#     nx[ix] = np.sum(men_cats == ix)
+# st.write("Here is the allocation of men")
+# st.write(nx)
+# women_cats = np.array(random.choices(range(ncat_women), k=nwomen))
+# my = np.zeros(ncat_women)
+# for iy in range(ncat_women):
+#     my[iy] = np.sum(women_cats == iy)
+# st.write("Here is the allocation of women")
+# st.write(my)
 
+st.subheader(
+    "OK, now we generate the joint surpluses for all potential couples")
 
-Phi = np.random.normal(size=ncat_men*ncat_women).reshape((ncat_men,ncat_women))
-st.write("'Systematic' joint surplus by categories")
+st.write("Choose coefficients for the six basis functions")
+st.write("$\Phi_{xy}=c_0+c_1 x + c_2 y + c_3 x^2 + c_4 x y + c_5 y^2$")
+
+c0 = st.slider("c0",
+               min_value=-5.0, max_value=5.0, value=0.0)
+c1 = st.slider("c1",
+               min_value=-1.0, max_value=1.0, value=0.0)
+c2 = st.slider("c2",
+               min_value=-1.0, max_value=1.0, value=0.0)
+c3 = st.slider("c3",
+               min_value=-1.0, max_value=1.0, value=0.0)
+c4 = st.slider("c4",
+               min_value=-1.0, max_value=1.0, value=0.0)
+c5 = st.slider("c5",
+               min_value=-1.0, max_value=1.0, value=0.0)
+
+xvals = np.arange(ncat_men) + 1
+yvals = np.arange(ncat_women) + 1
+
+Phi = np.zeros((ncat_men, ncat_women))
+Phi += c0
+Phi += ((c1 * xvals+c3*xvals*xvals).reshape((-1, 1)))
+Phi += (c2 * yvals+c4*yvals*yvals)
+Phi += (c5*np.outer(xvals, yvals))
+
+st.write("Here is your joint surplus by categories")
 st.write(Phi)
 
+str_Phi = "Joint surplus"
+plot_heatmap(Phi, str_Phi)
 
-st.subheader("Time to solve for equilibrium")
-if st.button("Solve"):
+
+st.subheader("Time to solve for the equilibrium!")
+solve_it = st.button("Solve")
+if solve_it:
     (muxy, mux0, mu0y), marg_err_x, marg_err_y \
         = ipfp_homo_solver(Phi, nx, my)
-    row_names  = ['men %d' % i for i in range(ncat_men)]
-    col_names = ['women %d' % i for i in range(ncat_women)]
+    row_names = ['men %d' % i for i in xvals]
+    col_names = ['women %d' % i for i in yvals]
     df_muxy = pd.DataFrame(muxy, index=row_names,
                            columns=col_names)
     st.write("Matches by cell")
     st.table(df_muxy)
-    st.write("Errors on margins for men")
-    st.write(marg_err_x)
-    st.write("Errors on margins for women")
-    st.write(marg_err_y)
-    st.subheader("Checking that the Choo and Siow formula holds")
-    impliedPhi = np.log(muxy*muxy/np.outer(mux0, mu0y))
-    st.write("THe errors on the implied joint surplus are:")
-    df_Phi = pd.DataFrame(impliedPhi - Phi, index=row_names,
-                           columns=col_names)
-    st.table(df_Phi)
-    
+    str_muxy = "Equilibrium Matching Patterns"
+    plot_heatmap(muxy, str_muxy)
 
+    st.write("Single men")
+    df_mux0 = pd.DataFrame(mux0, index=row_names)
+    st.table(df_mux0)
+    st.write("Single women")
+    df_mu0y = pd.DataFrame(mu0y, index=col_names)
+    st.table(df_mu0y)
 
-
+    # st.write("Would you like to check that this is indeed an equilibrium?")
+    # if st.button("Check"):
+    #     st.write("Errors on margins for men")
+    #     st.write(marg_err_x)
+    #     st.write("Errors on margins for women")
+    #     st.write(marg_err_y)
+    #     st.subheader("Checking that the Choo and Siow formula holds")
+    #     impliedPhi = np.log(muxy*muxy/np.outer(mux0, mu0y))
+    #     st.write("The errors on the implied joint surplus are:")
+    #     df_Phi = pd.DataFrame(impliedPhi - Phi, index=row_names,
+    #                           columns=col_names)
+    #     st.table(df_Phi)
