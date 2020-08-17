@@ -8,16 +8,37 @@ import plotly.express as px
 from ipfp_solvers import ipfp_homo_solver
 import random
 
-# style
-plt.style.use('seaborn')
 
-
-def plot_heatmap(mu, str_tit):
-    fig, ax = plt.subplots()
-    ax.matshow(mu, cmap="YlOrRd")
-    ax.set_title(str_tit)
-    # fig.set_size_inches([2, 2])
-    st.pyplot()
+def plot_heatmap(mat, str_tit):
+    ncat_men, ncat_women = mat.shape
+    mat_arr = np.empty((mat.size, 4))
+    mat_min, mat_max = np.min(mat), np.max(mat)
+    i = 0
+    for ix in range(ncat_men):
+        for iy in range(ncat_women):
+            m = mat[ix, iy]
+            s = 10.0*(0.5+2.0*(m - mat_min)/(mat_max - mat_min))
+            mat_arr[i, :] = np.array([ix, iy, m, s])
+            i += 1
+            
+    mat_df = pd.DataFrame(mat_arr, columns=['Men', 'Women', 'Value', 'Size'])
+    mat_df = mat_df.astype(dtype={'Men': int, 'Women': int, 'Value':  float,
+                                  'Size': float  })
+    base = alt.Chart(mat_df).encode(
+    x='Men:O',
+    y=alt.Y('Women:O', sort="descending")
+        )
+    mat_map = base.mark_circle(opacity=0.4).encode(
+    size=alt.Size('Size:Q', legend=None,
+        scale=alt.Scale(range=[1000, 10000])),
+        color=alt.Color('Value:Q'),
+    #tooltip=alt.Tooltip('Value', format=".2f")
+    )
+    text = base.mark_text(baseline='middle', fontSize=16).encode(
+        text=alt.Text('Value:Q', format=".2f"),
+        )
+    both = (mat_map + text).properties(title=str_tit, width=500, height=500)
+    return both
 
 
 st.title("Solving for matching equilibrium with IPFP")
@@ -83,10 +104,10 @@ Phi += (c2 * yvals+c4*yvals*yvals)
 Phi += (c5*np.outer(xvals, yvals))
 
 st.write("Here is your joint surplus by categories")
-st.write(Phi)
+# st.write(Phi)
 
 str_Phi = "Joint surplus"
-plot_heatmap(Phi, str_Phi)
+st.altair_chart(plot_heatmap(Phi, str_Phi))
 
 
 st.subheader("Time to solve for the equilibrium!")
@@ -98,10 +119,10 @@ if solve_it:
     col_names = ['women %d' % i for i in yvals]
     df_muxy = pd.DataFrame(muxy, index=row_names,
                            columns=col_names)
-    st.write("Matches by cell")
-    st.table(df_muxy)
+#    st.write("Matches by cell")
+#    st.table(df_muxy)
     str_muxy = "Equilibrium Matching Patterns"
-    plot_heatmap(muxy, str_muxy)
+    st.altair_chart(plot_heatmap(muxy, str_muxy))
 
     st.write("Single men")
     df_mux0 = pd.DataFrame(mux0, index=row_names)
