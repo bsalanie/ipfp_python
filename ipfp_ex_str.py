@@ -17,7 +17,7 @@ def plot_heatmap(mat, str_tit):
     for ix in range(ncat_men):
         for iy in range(ncat_women):
             m = mat[ix, iy]
-            s = 10.0*(0.5+2.0*(m - mat_min)/(mat_max - mat_min))
+            s = m - mat_min + 1
             mat_arr[i, :] = np.array([ix, iy, m, s])
             i += 1
             
