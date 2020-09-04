@@ -20,23 +20,23 @@ def plot_heatmap(mat, str_tit):
             s = m - mat_min + 1
             mat_arr[i, :] = np.array([ix, iy, m, s])
             i += 1
-            
+
     mat_df = pd.DataFrame(mat_arr, columns=['Men', 'Women', 'Value', 'Size'])
     mat_df = mat_df.astype(dtype={'Men': int, 'Women': int, 'Value':  float,
-                                  'Size': float  })
+                                  'Size': float})
     base = alt.Chart(mat_df).encode(
-    x='Men:O',
-    y=alt.Y('Women:O', sort="descending")
-        )
+        x='Men:O',
+        y=alt.Y('Women:O', sort="descending")
+    )
     mat_map = base.mark_circle(opacity=0.4).encode(
-    size=alt.Size('Size:Q', legend=None,
-        scale=alt.Scale(range=[1000, 10000])),
+        size=alt.Size('Size:Q', legend=None,
+                      scale=alt.Scale(range=[1000, 10000])),
         color=alt.Color('Value:Q'),
-    #tooltip=alt.Tooltip('Value', format=".2f")
+        #tooltip=alt.Tooltip('Value', format=".2f")
     )
     text = base.mark_text(baseline='middle', fontSize=16).encode(
         text=alt.Text('Value:Q', format=".2f"),
-        )
+    )
     both = (mat_map + text).properties(title=str_tit, width=500, height=500)
     return both
 
