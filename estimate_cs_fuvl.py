@@ -18,23 +18,12 @@ from ipfp_utils import print_stars
 from ipfp_solvers import ipfp_homo_solver
 
 
-@dataclass
-class cs_data:
-    muxy_obs: np.ndarray
-    nx: np.ndarray
-    my: np.ndarray
-    bases: np.ndarray
-
-
 def f_objgrad(pars: np.ndarray, args: List) \
         -> Tuple[float, np.ndarray]:
     """
 
     """
-    data, gr = args
-    bases = data.bases
-    muxy_obs = data.muxy_obs
-    nx, my = data.nx, data.my
+    muxy, nx, my, bases, gr = args
     ncat_men, _, n_bases = bases.shape
     npars = pars.size
 
@@ -56,27 +45,28 @@ def f_objgrad(pars: np.ndarray, args: List) \
 
     f_val = np.dot(nx, t_u) + np.dot(my, t_v) \
         + 2.0*sum_xy
-    f_val -= np.sum(muxy_obs*Phi_l)
+    f_val -= np.sum(muxy*Phi_l)
 
     if gr:
         f_grad[:ncat_men] = nx*(1.0 - expmu) - np.sum(ts_xy, 1)
         f_grad[ncat_men:-n_bases] = my*(1.0 - expmv) - np.sum(ts_xy, 0)
         f_grad[-n_bases:] =  \
-            np.einsum('xy,xyl->l', ts_xy - muxy_obs, bases)
+            np.einsum('xy,xyl->l', ts_xy - muxy, bases)
 
     return f_val, f_grad
 
 
 def estimate_cs_fuvl(muxy: np.ndarray, nx: np.ndarray,
-                     my: np.ndarray, bases: np.ndarray,
-                     lambda_init: np.ndarray) -> spopt.OptimizeResult:
-    data = cs_data(muxy, nx, my, bases)
+                     my: np.ndarray, bases: np.ndarray) -> spopt.OptimizeResult:
+    n_bases = bases.shape[2]
     l_init = np.random.normal(size=n_bases)
+    mux0 = nx - np.sum(muxy, 1)
+    mu0y = my - np.sum(muxy, 0)
     p_init = np.concatenate((-np.log(mux0/nx),
                              -np.log(mu0y/my), l_init))
     resus = spopt.minimize(f_objgrad, p_init,
-                           args=[data, True],
-                           jac=True, options={'disp': True})
+                           args=[muxy, nx, my, bases, True],
+                           jac=True)  # , options={'disp': True})
     return resus
 
 
@@ -100,10 +90,9 @@ if __name__ == "__main__":
     v0 = -np.log(mu0y_obs/my)
 
     p0 = np.concatenate((u0, v0, l0))
-    data = cs_data(muxy_obs, nx, my, bases)
 
     # checking the gradient
-    f0, f_grad = f_objgrad(p0, [data, True])
+    f0, f_grad = f_objgrad(p0, [muxy_obs, nx, my, bases, True])
 
     g = np.zeros_like(p0)
 
@@ -111,7 +100,7 @@ if __name__ == "__main__":
     for i, p in enumerate(p0):
         p1 = p0.copy()
         p1[i] = p + EPS
-        f1, _ = f_objgrad(p1, [data, False])
+        f1, _ = f_objgrad(p1, [muxy_obs, nx, my, bases, False])
         g[i] = (f1-f0)/EPS
 
     print_stars("checking the gradient: analytic, numeric")
@@ -123,8 +112,7 @@ if __name__ == "__main__":
         = ipfp_homo_solver(Phi0, nx, my)
 
     # and we estimate it
-    l_init = np.random.normal(size=n_bases)
-    resus = estimate_cs_fuvl(muxy, nx, my, bases, l_init)
+    resus = estimate_cs_fuvl(muxy, nx, my, bases)
 
     print("Results of minimization")
     u = resus.x[:ncat_men]
