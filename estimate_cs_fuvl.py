@@ -3,14 +3,10 @@ Estimation of the `Choo and Siow 2006 <https://www.jstor.org/stable/10.1086/4985
 in its original version (homoskedastic with singles).
 
 We minimize the :math:`F(u,v,\\lambda)-\\hat{\\mu}\\cdot \\Phi^{\\lambda}` function of Galichon--Salanie (2020, Proposition 5.)
-
 """
 import numpy as np
-from math import sqrt
-import sys
 
 from typing import Tuple, List
-from dataclasses import dataclass
 
 import scipy.optimize as spopt
 
@@ -18,10 +14,10 @@ from ipfp_utils import print_stars
 from ipfp_solvers import ipfp_homo_solver
 
 
-def f_objgrad(pars: np.ndarray, args: List) \
+def _f_objgrad(pars: np.ndarray, args: List) \
         -> Tuple[float, np.ndarray]:
     """
-
+    this evaluates the objective function and its gradient
     """
     muxy, nx, my, bases, gr = args
     ncat_men, _, n_bases = bases.shape
@@ -58,13 +54,33 @@ def f_objgrad(pars: np.ndarray, args: List) \
 
 def estimate_cs_fuvl(muxy: np.ndarray, nx: np.ndarray,
                      my: np.ndarray, bases: np.ndarray) -> spopt.OptimizeResult:
+    """
+    this estimates the parameters and equilibrium utilities in a semilinear homoskedastic Choo-Siow model.
+
+    :param np.ndarray muxy: the numbers of matches in each `(x,y)` cell, a `(X,Y)` matrix
+
+    :param np.ndarray nx: the numbers of men in each x cell, a `X`-vector
+
+    :param np.ndarray my: the numbers of women in each `y` cell, a `Y`-vector
+
+    :param np.ndarray bases: the values of the K basis functions in each cell, a `(X,Y,K)` array
+
+    :return: a `scipy.optimize.OptimizeResult` object `resus`. \
+    `resus.x` has the estimates of :math:`u, v`, \
+        and :math:`\\lambda` in that order:
+
+     * :math:`u_x` the expected utility of men of type `x`
+     * :math:`v_y` the expected utility of women of type `y`
+     * :math:`\\lambda_k` the coefficient of basis function `k`
+
+    """
+
     n_bases = bases.shape[2]
     l_init = np.random.normal(size=n_bases)
     mux0 = nx - np.sum(muxy, 1)
     mu0y = my - np.sum(muxy, 0)
-    p_init = np.concatenate((-np.log(mux0/nx),
-                             -np.log(mu0y/my), l_init))
-    resus = spopt.minimize(f_objgrad, p_init,
+    p_init = np.concatenate((-np.log(mux0/nx), -np.log(mu0y/my), l_init))
+    resus = spopt.minimize(_f_objgrad, p_init,
                            args=[muxy, nx, my, bases, True],
                            jac=True)  # , options={'disp': True})
     return resus

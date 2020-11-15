@@ -1,17 +1,18 @@
+""" 
+Interactive Streamlit application that solves for equilibrium and estimates parameters \
+    in a `Choo and Siow 2006 <https://www.jstor.org/stable/10.1086/498585?seq=1>`_ model \
+        (homoskedastic model with singles)
+"""
 
-import matplotlib.pyplot as plt
+
 import numpy as np
 import pandas as pd
 import altair as alt
 import streamlit as st
-import plotly.express as px
-import scipy.optimize as spopt
 
 from ipfp_utils import nprepeat_col, nprepeat_row
 from ipfp_solvers import ipfp_homo_solver
 from estimate_cs_fuvl import estimate_cs_fuvl
-
-import random
 
 
 def plot_heatmap(mat, str_tit):
@@ -65,20 +66,6 @@ for iman in range(ncat_men):
 for iwoman in range(ncat_women):
     my[iwoman] = st.slider(f"Number of women in category {iwoman+1}",
                            min_value=1, max_value=10, step=1)
-
-# st.subheader("Let me allocate these men and women in categories")
-# men_cats = np.array(random.choices(range(ncat_men), k=nmen))
-# nx = np.zeros(ncat_men)
-# for ix in range(ncat_men):
-#     nx[ix] = np.sum(men_cats == ix)
-# st.write("Here is the allocation of men")
-# st.write(nx)
-# women_cats = np.array(random.choices(range(ncat_women), k=nwomen))
-# my = np.zeros(ncat_women)
-# for iy in range(ncat_women):
-#     my[iy] = np.sum(women_cats == iy)
-# st.write("Here is the allocation of women")
-# st.write(my)
 
 st.subheader(
     "Now we generate the joint surpluses for all potential couples")
@@ -150,23 +137,20 @@ Phi = bases @ coeffs
 
 
 st.write("Here is your joint surplus by categories")
-# st.write(Phi)
 
 str_Phi = "Joint surplus"
 st.altair_chart(plot_heatmap(Phi, str_Phi))
 
 
 st.subheader("Time to solve for the equilibrium!")
-# solve_it = st.button("Solve")
-# if solve_it:
+
 (muxy, mux0, mu0y), marg_err_x, marg_err_y\
     = ipfp_homo_solver(Phi, nx, my)
 row_names = ['men %d' % i for i in xvals]
 col_names = ['women %d' % i for i in yvals]
 df_muxy = pd.DataFrame(muxy, index=row_names,
                        columns=col_names)
-#    st.write("Matches by cell")
-#    st.table(df_muxy)
+
 str_muxy = "Equilibrium Matching Patterns"
 st.altair_chart(plot_heatmap(muxy, str_muxy))
 
@@ -183,8 +167,7 @@ st.markdown(
     "We do this by minimizing the globally convex function given in Proposition 5 of [Galichon and Salanie 2020](https://econ.columbia.edu/working-paper/cupids-invisible-hand-social-surplus-and-identification-in-matching-models-2).")
 st.write(
     "It will also give us the estimates of the expected utilities $u_x$ and $v_y$.")
-# estimate_it = st.button("Estimate")
-# if estimate_it:
+
 data_muxy = muxy
 data_nx = mux0 + np.sum(muxy, 1)
 data_my = mu0y + np.sum(muxy, 0)

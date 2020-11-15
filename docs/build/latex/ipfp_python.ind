@@ -1,0 +1,53 @@
+\begin{sphinxtheindex}
+\let\bigletter\sphinxstyleindexlettergroup
+\let\spxpagem \sphinxstyleindexpagemain
+\let\spxentry \sphinxstyleindexentry
+\let\spxextra \sphinxstyleindexextra
+
+  \bigletter D
+  \item \spxentry{der\_npexp()}\spxextra{in module ipfp\_utils}, \hyperpage{3}
+  \item \spxentry{der\_nplog()}\spxextra{in module ipfp\_utils}, \hyperpage{3}
+  \item \spxentry{der\_nppow()}\spxextra{in module ipfp\_utils}, \hyperpage{3}
+  \item \spxentry{describe\_array()}\spxextra{in module ipfp\_utils}, \hyperpage{3}
+
+  \indexspace
+  \bigletter E
+  \item \spxentry{estimate\_cs\_fuvl}
+    \subitem \spxentry{module}, \hyperpage{7}
+  \item \spxentry{estimate\_cs\_fuvl()}\spxextra{in module estimate\_cs\_fuvl}, \hyperpage{7}
+
+  \indexspace
+  \bigletter I
+  \item \spxentry{ipfp\_ex\_str}
+    \subitem \spxentry{module}, \hyperpage{5}
+  \item \spxentry{ipfp\_hetero\_solver()}\spxextra{in module ipfp\_solvers}, \hyperpage{1}
+  \item \spxentry{ipfp\_heteroxy\_solver()}\spxextra{in module ipfp\_solvers}, \hyperpage{1}
+  \item \spxentry{ipfp\_homo\_nosingles\_solver()}\spxextra{in module ipfp\_solvers}, \hyperpage{2}
+  \item \spxentry{ipfp\_homo\_solver()}\spxextra{in module ipfp\_solvers}, \hyperpage{2}
+  \item \spxentry{ipfp\_solvers}
+    \subitem \spxentry{module}, \hyperpage{1}
+  \item \spxentry{ipfp\_utils}
+    \subitem \spxentry{module}, \hyperpage{3}
+
+  \indexspace
+  \bigletter M
+  \item \spxentry{module}
+    \subitem \spxentry{estimate\_cs\_fuvl}, \hyperpage{7}
+    \subitem \spxentry{ipfp\_ex\_str}, \hyperpage{5}
+    \subitem \spxentry{ipfp\_solvers}, \hyperpage{1}
+    \subitem \spxentry{ipfp\_utils}, \hyperpage{3}
+
+  \indexspace
+  \bigletter N
+  \item \spxentry{npexp()}\spxextra{in module ipfp\_utils}, \hyperpage{3}
+  \item \spxentry{nplog()}\spxextra{in module ipfp\_utils}, \hyperpage{4}
+  \item \spxentry{npmaxabs()}\spxextra{in module ipfp\_utils}, \hyperpage{4}
+  \item \spxentry{nppow()}\spxextra{in module ipfp\_utils}, \hyperpage{4}
+  \item \spxentry{nprepeat\_col()}\spxextra{in module ipfp\_utils}, \hyperpage{4}
+  \item \spxentry{nprepeat\_row()}\spxextra{in module ipfp\_utils}, \hyperpage{4}
+
+  \indexspace
+  \bigletter P
+  \item \spxentry{print\_stars()}\spxextra{in module ipfp\_utils}, \hyperpage{4}
+
+\end{sphinxtheindex}

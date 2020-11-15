@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module ipfp_solvers &#8212; ipfp_python 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Module ipfp_utils" href="ipfp_utils.html" />
+    <link rel="prev" title="Documentation for package ipfp_python" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-ipfp_solvers">
+<span id="module-ipfp-solvers"></span><h1>Module <a class="reference internal" href="#module-ipfp_solvers" title="ipfp_solvers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipfp_solvers</span></code></a><a class="headerlink" href="#module-ipfp_solvers" title="Permalink to this headline">¶</a></h1>
+<p>Implementations of the IPFP algorithm to solve for equilibrium and do comparative statics
+in several variants of the <a class="reference external" href="https://www.jstor.org/stable/10.1086/498585?seq=1">Choo and Siow 2006</a> model:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>homoskedastic with singles (as in CS 2006)</p></li>
+<li><p>homoskedastic without singles</p></li>
+<li><p>gender-heteroskedastic: with a scale parameter on the error term for women</p></li>
+<li><p>gender- and type-heteroskedastic: with a scale parameter on the error term for women</p></li>
+</ul>
+</div></blockquote>
+<p>each solver, when fed the joint surplus and margins,
+returns the equilibrium matching patterns, the adding-up errors on the margins,
+and if requested (gr=True) the derivatives of the matching patterns in all primitives.</p>
+<dl class="py function">
+<dt id="ipfp_solvers.ipfp_hetero_solver">
+<code class="sig-prename descclassname">ipfp_solvers.</code><code class="sig-name descname">ipfp_hetero_solver</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Phi</span></em>, <em class="sig-param"><span class="n">men_margins</span></em>, <em class="sig-param"><span class="n">women_margins</span></em>, <em class="sig-param"><span class="n">tau</span></em>, <em class="sig-param"><span class="n">tol</span><span class="o">=</span><span class="default_value">1e-09</span></em>, <em class="sig-param"><span class="n">gr</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">maxiter</span><span class="o">=</span><span class="default_value">1000</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipfp_solvers.ipfp_hetero_solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>solve for equilibrium in a  in a gender-heteroskedastic Choo and Siow market</p>
+<p>given systematic surplus and margins and a scale parameter dist_params[0]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Phi</strong> (<em>np.array</em>) – matrix of systematic surplus, shape (ncat_men, ncat_women)</p></li>
+<li><p><strong>men_margins</strong> (<em>np.array</em>) – vector of men margins, shape (ncat_men)</p></li>
+<li><p><strong>women_margins</strong> (<em>np.array</em>) – vector of women margins, shape (ncat_women)</p></li>
+<li><p><strong>tau</strong> (<em>float</em>) – a positive scale parameter for the error term on women</p></li>
+<li><p><strong>tol</strong> (<em>float</em>) – tolerance on change in solution</p></li>
+<li><p><strong>gr</strong> (<em>boolean</em>) – if True, also evaluate derivatives of muxy wrt Phi</p></li>
+<li><p><strong>verbose</strong> (<em>boolean</em>) – prints stuff</p></li>
+<li><p><strong>maxiter</strong> (<em>int</em>) – maximum number of iterations</p></li>
+<li><p><strong>dist_params</strong> (<em>np.array</em>) – array of one positive number (the scale parameter for women)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(muxy, mux0, mu0y), errors on margins marg_err_x, marg_err_y,
+and gradients of (muxy, mux0, mu0y)
+wrt (men_margins, women_margins, Phi, dist_params[0]) if gr=True</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ipfp_solvers.ipfp_heteroxy_solver">
+<code class="sig-prename descclassname">ipfp_solvers.</code><code class="sig-name descname">ipfp_heteroxy_solver</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Phi</span></em>, <em class="sig-param"><span class="n">men_margins</span></em>, <em class="sig-param"><span class="n">women_margins</span></em>, <em class="sig-param"><span class="n">sigma_x</span></em>, <em class="sig-param"><span class="n">tau_y</span></em>, <em class="sig-param"><span class="n">tol</span><span class="o">=</span><span class="default_value">1e-09</span></em>, <em class="sig-param"><span class="n">gr</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">maxiter</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipfp_solvers.ipfp_heteroxy_solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>solve for equilibrium in a  in a gender- and type-heteroskedastic Choo and Siow market</p>
+<p>given systematic surplus and margins and a scale parameter dist_params[0]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Phi</strong> (<em>np.array</em>) – matrix of systematic surplus, shape (ncat_men, ncat_women)</p></li>
+<li><p><strong>men_margins</strong> (<em>np.array</em>) – vector of men margins, shape (ncat_men)</p></li>
+<li><p><strong>women_margins</strong> (<em>np.array</em>) – vector of women margins, shape (ncat_women)</p></li>
+<li><p><strong>sigma_x</strong> (<em>np.array</em>) – an array of positive numbers of shape (ncat_men)</p></li>
+<li><p><strong>tau_y</strong> (<em>np.array</em>) – an array of positive numbers of shape (ncat_women)</p></li>
+<li><p><strong>tol</strong> (<em>float</em>) – tolerance on change in solution</p></li>
+<li><p><strong>gr</strong> (<em>boolean</em>) – if True, also evaluate derivatives of muxy wrt Phi</p></li>
+<li><p><strong>verbose</strong> (<em>boolean</em>) – prints stuff</p></li>
+<li><p><strong>maxiter</strong> (<em>int</em>) – maximum number of iterations</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(muxy, mux0, mu0y), errors on margins marg_err_x, marg_err_y,
+and gradients of (muxy, mux0, mu0y)
+wrt (men_margins, women_margins, Phi, dist_params) if gr=True</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ipfp_solvers.ipfp_homo_nosingles_solver">
+<code class="sig-prename descclassname">ipfp_solvers.</code><code class="sig-name descname">ipfp_homo_nosingles_solver</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Phi</span></em>, <em class="sig-param"><span class="n">men_margins</span></em>, <em class="sig-param"><span class="n">women_margins</span></em>, <em class="sig-param"><span class="n">tol</span><span class="o">=</span><span class="default_value">1e-09</span></em>, <em class="sig-param"><span class="n">gr</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">maxiter</span><span class="o">=</span><span class="default_value">1000</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipfp_solvers.ipfp_homo_nosingles_solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>solve for equilibrium in a Choo and Siow market without singles</p>
+<p>given systematic surplus and margins</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Phi</strong> (<em>np.array</em>) – matrix of systematic surplus, shape (ncat_men, ncat_women)</p></li>
+<li><p><strong>men_margins</strong> (<em>np.array</em>) – vector of men margins, shape (ncat_men)</p></li>
+<li><p><strong>women_margins</strong> (<em>np.array</em>) – vector of women margins, shape (ncat_women)</p></li>
+<li><p><strong>tol</strong> (<em>float</em>) – tolerance on change in solution</p></li>
+<li><p><strong>gr</strong> (<em>boolean</em>) – if True, also evaluate derivatives of muxy wrt Phi</p></li>
+<li><p><strong>verbose</strong> (<em>boolean</em>) – prints stuff</p></li>
+<li><p><strong>maxiter</strong> (<em>int</em>) – maximum number of iterations</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>muxy, marg_err_x, marg_err_y
+and gradients of muxy wrt Phi if gr=True</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ipfp_solvers.ipfp_homo_solver">
+<code class="sig-prename descclassname">ipfp_solvers.</code><code class="sig-name descname">ipfp_homo_solver</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Phi</span></em>, <em class="sig-param"><span class="n">men_margins</span></em>, <em class="sig-param"><span class="n">women_margins</span></em>, <em class="sig-param"><span class="n">tol</span><span class="o">=</span><span class="default_value">1e-09</span></em>, <em class="sig-param"><span class="n">gr</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">maxiter</span><span class="o">=</span><span class="default_value">1000</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipfp_solvers.ipfp_homo_solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>solve for equilibrium in a Choo and Siow market</p>
+<p>given systematic surplus and margins</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Phi</strong> (<em>np.array</em>) – matrix of systematic surplus, shape (ncat_men, ncat_women)</p></li>
+<li><p><strong>men_margins</strong> (<em>np.array</em>) – vector of men margins, shape (ncat_men)</p></li>
+<li><p><strong>women_margins</strong> (<em>np.array</em>) – vector of women margins, shape (ncat_women)</p></li>
+<li><p><strong>tol</strong> (<em>float</em>) – tolerance on change in solution</p></li>
+<li><p><strong>gr</strong> (<em>boolean</em>) – if True, also evaluate derivatives of muxy wrt Phi</p></li>
+<li><p><strong>verbose</strong> (<em>boolean</em>) – prints stuff</p></li>
+<li><p><strong>maxiter</strong> (<em>int</em>) – maximum number of iterations</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(muxy, mux0, mu0y), errors on margins marg_err_x, marg_err_y,
+and gradients of (muxy, mux0, mu0y)
+wrt (men_margins, women_margins, Phi) if gr=True</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">ipfp_python</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Module <code class="xref py py-mod docutils literal notranslate"><span class="pre">ipfp_solvers</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="ipfp_utils.html">Module <code class="xref py py-mod docutils literal notranslate"><span class="pre">ipfp_utils</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="ipfp_ex_str.html">Module <code class="xref py py-mod docutils literal notranslate"><span class="pre">ipfp_ex_str</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="estimate_cs_fuvl.html">Module <code class="xref py py-mod docutils literal notranslate"><span class="pre">estimate_cs_fuvl</span></code></a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Documentation for package ipfp_python</a></li>
+      <li>Next: <a href="ipfp_utils.html" title="next chapter">Module <code class="xref py py-mod docutils literal notranslate"><span class="pre">ipfp_utils</span></code></a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Bernard Salanie.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/ipfp_solvers.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
