@@ -13,7 +13,7 @@
 import sys
 import os
 package_name = "ipfp_python"
-sys.path.insert(0, os.path.abspath(f'../../../{package_name}'))
+sys.path.insert(0, os.path.abspath(f'../../{package_name}'))
 
 
 # -- Project information -----------------------------------------------------
