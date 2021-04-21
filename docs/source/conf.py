@@ -12,8 +12,18 @@
 #
 import sys
 import os
+
+# are we using Read the Docs?
+on_rtd = os.environ.get('READTHEDOCS') == 'True'
+
 package_name = "ipfp_python"
-sys.path.insert(0, os.path.abspath(f'../../../{package_name}'))
+if on_rtd:
+    package_path = os.path.abspath('../..')
+    sys.path.insert(0, package_path)
+    os.environ['PYTHONPATH'] = ':'.join((package_path,
+                                         os.environ.get('PYTHONPATH', '')))
+else:
+    sys.path.insert(0, os.path.abspath(f'../../../{package_name}'))
 #sys.path.insert(0, os.path.abspath(f'..'))
 #sys.path.insert(0, os.path.abspath(f'../..'))
 #sys.path.insert(0, os.path.abspath(f'../../..'))
@@ -39,6 +49,8 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.imgmath',
 ]
+if on_rtd:
+    extensions += 'sphinx_autodoc_typehints'
 
 autodoc_mock_imports = [
     'numpy', 'scipy', 'altair', 'streamlit', 
@@ -59,7 +71,8 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-#html_theme = 'sphinx_rtd_theme'
+if on_rtd:
+    html_theme = 'sphinx_rtd_theme'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
