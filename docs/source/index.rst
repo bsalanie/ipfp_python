@@ -7,7 +7,7 @@ Documentation for package ipfp_python
    ipfp_solvers
    estimate_cs_fuvl
    ipfp_utils
-   ipfp_ex_str
+
 
 
 
