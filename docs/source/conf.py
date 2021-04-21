@@ -37,6 +37,10 @@ extensions = [
     'sphinx.ext.imgmath',
 ]
 
+autodoc_mock_imports = [
+    'numpy', 'scipy', 'altair', 'streamlit', 
+    'pandas',
+]
 
 # Add any paths that contain templates here, relative to this directory.
 # templates_path = ['_templates']
@@ -52,7 +56,7 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'default'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
