@@ -1,8 +1,8 @@
 # IPFP in Python
 
 `ipfp_python` contains Python implementations of the Iterative
-Projection Fitting Procedure (IPFP) algorithm to solve for equilibrium
-and do comparative statics in several separable matching models 
+Projection Fitting Procedure (IPFP) algorithm to solve for equilibrium, 
+do comparative statics, and estimate the parameters in several separable matching models 
 of the 
 [Choo and Siow 2006](https://www.jstor.org/stable/10.1086/498585?seq=1) variety. 
 

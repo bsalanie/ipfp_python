@@ -1,0 +1,60 @@
+Guide
+=====
+
+:mod:`ipfp_python` contains Python implementations of the Iterative
+Projection Fitting Procedure (IPFP) algorithm to solve for equilibrium
+and do comparative statics in several separable matching models 
+of the 
+`Choo and Siow 2006 <https://www.jstor.org/stable/10.1086/498585?seq=1>`_ variety. 
+
+This class of matching models is one-to-one, bipartite, separable 
+with perfectly transferable
+utilities---see `Galichon and Salanié 2020 <https://econ.columbia.edu/working-paper/cupids-invisible-hand-social-surplus-and-identification-in-matching-models-2/>`_ 
+for a general study.
+For concreteness, I will use the terms *men* and *women* to describe 
+the two sides of the market. The joint surplus created by a match between a man 
+:math:`i` 
+who belongs to a discrete category :math:`x` and a woman 
+:math:`j` 
+who belongs to a discrete category :math:`y` is
+
+.. math::
+
+   \tilde{\Phi}_{ij} = \Phi_{xy} + \varepsilon^i_y +\eta^j_x.
+
+The original Choo and Siow model had the :math:`\varepsilon^i_y` and :math:`\eta^j_x` error terms
+drawn iid from a standard type I extreme value (multinomial logit) distribution. We call it
+the *homoskedastic* model. The function :func:`ipfp_homo_solver` solves for its equilibrium 
+given the values of the joint surplus (the matrix :math:`\Phi`) and the margins (the numbers
+:math:`n_x` and :math:`m_y` of men and women in each discrete category).
+
+The :mod:`ipfp_python` module also contains solvers for 
+
+* the homoskedastic model without singles (:func:`ipfp_homo_solver_no_singles`, for use when only data on realized matches is available)
+* a gender-heteroskedastic model (:func:`ipfp_hetero_solver`), which allows for with a scale parameter on the error term for women (that is, :math:`\tau\eta^j_x`)
+* a gender- and type-heteroskedastic (:func:`ipfp_heteroxy_solver`), with type-dependent scale parameters on the error terms for men and for women:
+
+.. math::
+
+   \varepsilon^i_y +\eta^j_x \to \sigma_x\varepsilon^i_y +\tau_y\eta^j_x
+ 
+
+In the heteroskedastic models, the scale parameters must also be provided as inputs to the algorithm.
+
+Each solver has two tuning parameters that control when it stops:
+
+* `tol` is a tolerance on the difference between candidate solutions at two successive iterations
+* `maxiter` sets an upper limit on the  number of iterations.
+
+They are set at reasonable defaults, but you may want to change `tol` at least.
+
+In addition to the equilibrium matching patterns by cell :math:`(\mu_{xy},\mu_{x0},\mu_{0y})`, (only :math:`\mu_{xy}` for :func:`ipfp_homo_solver_no_singles`),
+the solvers also return the adjustment errors on the margins, and, if the optional 
+parameter `gr` is set to `True`, the derivatives of the equilibrium matching
+patterns with respect to the 
+parameters: the joint surplus, the margins, and the scale parameters if any.
+
+The algorithm and its properties are described in detail in 
+`Galichon and Salanié 2020 <https://econ.columbia.edu/working-paper/cupids-invisible-hand-social-surplus-and-identification-in-matching-models-2/>`_. 
+It is extremely fast and robust.
+
