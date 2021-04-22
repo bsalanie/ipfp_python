@@ -142,7 +142,7 @@ def npexp(arr: np.array, bigx: float = 30.0, verbose: bool = False) -> np.array:
 
     :param float bigx: upper bound
 
-    :return:   :math:\\exp(a)`  :math:`C^2`-extended above `bigx`
+    :return:   :math:`\\exp(a)`  :math:`C^2`-extended above `bigx`
     """
     if np.max(arr) < bigx:
         return np.exp(arr)

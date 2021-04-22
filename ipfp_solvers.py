@@ -46,17 +46,19 @@ def ipfp_homo_nosingles_solver(Phi, men_margins, women_margins,
 
     :param int maxiter: maximum number of iterations
 
-    :return: muxy, marg_err_x, marg_err_y
-             and gradients of muxy wrt Phi if gr=True
+    :return:   
+         * muxy the matching patterns, shape (ncat_men, ncat_women)
+         * marg_err_x, marg_err_y the errors on the margins
+         * and the gradients of muxy wrt Phi if gr=True
     """
     ncat_men = men_margins.shape[0]
     ncat_women = women_margins.shape[0]
     n_couples = np.sum(men_margins)
 
-
     # check that there are as many men as women
     if np.abs(np.sum(women_margins) - n_couples) > n_couples * tol:
-        print_stars(f"{ipfp_homo_nosingles_solver}: there should be as many men as women")
+        print_stars(
+            f"{ipfp_homo_nosingles_solver}: there should be as many men as women")
 
     if Phi.shape != (ncat_men, ncat_women):
         print_stars(
@@ -116,17 +118,17 @@ def ipfp_homo_nosingles_solver(Phi, men_margins, women_margins,
 
         #  to compute derivatives of (txi, tyi) wrt Phi
         der_ephi2 = der_npexp(Phi / 2.0) / \
-                    (2.0 * ephi2)  # 1/2 with safeguards
+            (2.0 * ephi2)  # 1/2 with safeguards
         ivar = 0
         for iman in range(ncat_men):
             rhs[iman, ivar:(ivar + ncat_women)] = - \
-                                                      muxy[iman, :] * der_ephi2[iman, :]
+                muxy[iman, :] * der_ephi2[iman, :]
             ivar += ncat_women
         ivar1 = ncat_men
         ivar2 = 0
         for iwoman in range(ncat_women):
             rhs[ivar1, ivar2:n_cols_rhs:ncat_women] = - \
-                                                          muxy[:, iwoman] * der_ephi2[:, iwoman]
+                muxy[:, iwoman] * der_ephi2[:, iwoman]
             ivar1 += 1
             ivar2 += 1
         # solve for the derivatives of txi and tyi
@@ -139,12 +141,12 @@ def ipfp_homo_nosingles_solver(Phi, men_margins, women_margins,
         for iman in range(ncat_men):
             dt_man = dt[iman, :]
             dmuxy[ivar:(ivar + ncat_women),
-            :] = np.outer((ephi2[iman, :] * tyi), dt_man)
+                  :] = np.outer((ephi2[iman, :] * tyi), dt_man)
             ivar += ncat_women
         for iwoman in range(ncat_women):
             dT_woman = dT[iwoman, :]
             dmuxy[iwoman:n_prod_categories:ncat_women,
-            :] += np.outer((ephi2[:, iwoman] * txi), dT_woman)
+                  :] += np.outer((ephi2[:, iwoman] * txi), dT_woman)
         # add the term that comes from differentiating ephi2
         muxy_vec2 = (muxy * der_ephi2).reshape(n_prod_categories)
         dmuxy += np.diag(muxy_vec2)
@@ -172,9 +174,10 @@ def ipfp_homo_solver(Phi, men_margins, women_margins, tol=1e-9,
 
     :param int maxiter: maximum number of iterations
 
-    :return: (muxy, mux0, mu0y), errors on margins marg_err_x, marg_err_y,
-             and gradients of (muxy, mux0, mu0y)
-             wrt (men_margins, women_margins, Phi) if gr=True
+    :return: 
+         * (muxy, mux0, mu0y) the matching patterns
+         * marg_err_x, marg_err_y the errors on the margins
+         * and the gradients of (muxy, mux0, mu0y) wrt (men_margins, women_margins, Phi) if gr=True
     """
 
     ncat_men = men_margins.size
@@ -242,20 +245,20 @@ def ipfp_homo_solver(Phi, men_margins, women_margins, tol=1e-9,
         rhs[:ncat_men, :ncat_men] = np.eye(ncat_men)
         #  to compute derivatives of (txi, tyi) wrt women_margins
         rhs[ncat_men:n_sum_categories,
-        ncat_men:n_sum_categories] = np.eye(ncat_women)
+            ncat_men:n_sum_categories] = np.eye(ncat_women)
         #  to compute derivatives of (txi, tyi) wrt Phi
         der_ephi2 = der_npexp(Phi / 2.0) / \
-                    (2.0 * ephi2)  # 1/2 with safeguards
+            (2.0 * ephi2)  # 1/2 with safeguards
         ivar = n_sum_categories
         for iman in range(ncat_men):
             rhs[iman, ivar:(ivar + ncat_women)] = - \
-                                                      muxy[iman, :] * der_ephi2[iman, :]
+                muxy[iman, :] * der_ephi2[iman, :]
             ivar += ncat_women
         ivar1 = ncat_men
         ivar2 = n_sum_categories
         for iwoman in range(ncat_women):
             rhs[ivar1, ivar2:n_cols_rhs:ncat_women] = - \
-                                                          muxy[:, iwoman] * der_ephi2[:, iwoman]
+                muxy[:, iwoman] * der_ephi2[:, iwoman]
             ivar1 += 1
             ivar2 += 1
         # solve for the derivatives of txi and tyi
@@ -269,11 +272,13 @@ def ipfp_homo_solver(Phi, men_margins, women_margins, tol=1e-9,
         ivar = 0
         for iman in range(ncat_men):
             dt_man = dt[iman, :]
-            dmuxy[ivar:(ivar + ncat_women), :] = np.outer((ephi2[iman, :] * tyi), dt_man)
+            dmuxy[ivar:(ivar + ncat_women),
+                  :] = np.outer((ephi2[iman, :] * tyi), dt_man)
             ivar += ncat_women
         for iwoman in range(ncat_women):
             dT_woman = dT[iwoman, :]
-            dmuxy[iwoman:n_prod_categories:ncat_women, :] += np.outer((ephi2[:, iwoman] * txi), dT_woman)
+            dmuxy[iwoman:n_prod_categories:ncat_women,
+                  :] += np.outer((ephi2[:, iwoman] * txi), dT_woman)
         # add the term that comes from differentiating ephi2
         muxy_vec2 = (muxy * der_ephi2).reshape(n_prod_categories)
         dmuxy[:, n_sum_categories:] += np.diag(muxy_vec2)
@@ -305,9 +310,10 @@ def ipfp_hetero_solver(Phi, men_margins, women_margins, tau, tol=1e-9,
 
     :param np.array dist_params: array of one positive number (the scale parameter for women)
 
-    :return: (muxy, mux0, mu0y), errors on margins marg_err_x, marg_err_y,
-             and gradients of (muxy, mux0, mu0y)
-             wrt (men_margins, women_margins, Phi, dist_params[0]) if gr=True
+    :return:
+        * (muxy, mux0, mu0y) the matching patterns
+        * marg_err_x, marg_err_y the errors on the margins
+        * and the gradients of (muxy, mux0, mu0y) wrt (men_margins, women_margins, Phi, dist_params[0]) if gr=True
     """
 
     ncat_men = men_margins.shape[0]
@@ -355,7 +361,6 @@ def ipfp_hetero_solver(Phi, men_margins, women_margins, tau, tol=1e-9,
                                     maxiter=maxiter, verbose=verbose)
 
 
-
 def ipfp_heteroxy_solver(Phi, men_margins, women_margins,
                          sigma_x, tau_y, tol=1e-9,
                          gr=False, maxiter=1000, verbose=False):
@@ -382,9 +387,10 @@ def ipfp_heteroxy_solver(Phi, men_margins, women_margins,
 
     :param int maxiter: maximum number of iterations
 
-    :return: (muxy, mux0, mu0y), errors on margins marg_err_x, marg_err_y,
-              and gradients of (muxy, mux0, mu0y)
-              wrt (men_margins, women_margins, Phi, dist_params) if gr=True
+    :return:
+         * (muxy, mux0, mu0y) the matching patterns
+         * marg_err_x, marg_err_y the errors on the margins
+         * and the gradients of (muxy, mux0, mu0y) wrt (men_margins, women_margins, Phi, dist_params) if gr=True
     """
 
     ncat_men, ncat_women = men_margins.size, women_margins.size
@@ -518,7 +524,7 @@ def ipfp_heteroxy_solver(Phi, men_margins, women_margins,
         rhs[:ncat_men, :ncat_men] = np.eye(ncat_men)
         #  to compute derivatives of (mux0, mu0y) wrt women_margins
         rhs[ncat_men:,
-        ncat_men:n_sum_categories] = np.eye(ncat_women)
+            ncat_men:n_sum_categories] = np.eye(ncat_women)
 
         #   the next line is sumxy1 with safeguards
         sumxy1_safe = sumxy1 * der_npexp(Phi * sumxy1) / ephi2
@@ -674,7 +680,7 @@ if __name__ == "__main__":
     print_stars("Testing ipfp homo w/o singles:")
     # we need as many women as men
     women_margins_nosingles = women_margins * \
-                              (np.sum(men_margins) / np.sum(women_margins))
+        (np.sum(men_margins) / np.sum(women_margins))
     muxy_nos, marg_err_x_nos, marg_err_y_nos = \
         ipfp_homo_nosingles_solver(true_surplus_matrix,
                                    men_margins, women_margins_nosingles, gr=False)
@@ -707,9 +713,11 @@ if __name__ == "__main__":
             mus, marg_err_x, marg_err_y = \
                 ipfp_heteroxy_solver(true_surplus_matrix, men_marg, women_margins,
                                      sigma_x, tau_y)
-            gradij_numeric[icoef] = (mus[0][iman, iwoman] - muij) / GRADIENT_STEP
+            gradij_numeric[icoef] = (
+                mus[0][iman, iwoman] - muij) / GRADIENT_STEP
             gradij_numeric_x0[icoef] = (mus[1][iman] - muij_x0) / GRADIENT_STEP
-            gradij_numeric_0y[icoef] = (mus[2][iwoman] - muij_0y) / GRADIENT_STEP
+            gradij_numeric_0y[icoef] = (
+                mus[2][iwoman] - muij_0y) / GRADIENT_STEP
             icoef += 1
         for iy in range(ncat_women):
             women_marg = women_margins.copy()
@@ -717,9 +725,11 @@ if __name__ == "__main__":
             mus, marg_err_x, marg_err_y = \
                 ipfp_heteroxy_solver(true_surplus_matrix, men_margins, women_marg,
                                      sigma_x, tau_y)
-            gradij_numeric[icoef] = (mus[0][iman, iwoman] - muij) / GRADIENT_STEP
+            gradij_numeric[icoef] = (
+                mus[0][iman, iwoman] - muij) / GRADIENT_STEP
             gradij_numeric_x0[icoef] = (mus[1][iman] - muij_x0) / GRADIENT_STEP
-            gradij_numeric_0y[icoef] = (mus[2][iwoman] - muij_0y) / GRADIENT_STEP
+            gradij_numeric_0y[icoef] = (
+                mus[2][iwoman] - muij_0y) / GRADIENT_STEP
             icoef += 1
         for i1 in range(ncat_men):
             for i2 in range(ncat_women):
@@ -728,9 +738,12 @@ if __name__ == "__main__":
                 mus, marg_err_x, marg_err_y = \
                     ipfp_heteroxy_solver(surplus_mat, men_margins, women_margins,
                                          sigma_x, tau_y)
-                gradij_numeric[icoef] = (mus[0][iman, iwoman] - muij) / GRADIENT_STEP
-                gradij_numeric_x0[icoef] = (mus[1][iman] - muij_x0) / GRADIENT_STEP
-                gradij_numeric_0y[icoef] = (mus[2][iwoman] - muij_0y) / GRADIENT_STEP
+                gradij_numeric[icoef] = (
+                    mus[0][iman, iwoman] - muij) / GRADIENT_STEP
+                gradij_numeric_x0[icoef] = (
+                    mus[1][iman] - muij_x0) / GRADIENT_STEP
+                gradij_numeric_0y[icoef] = (
+                    mus[2][iwoman] - muij_0y) / GRADIENT_STEP
                 icoef += 1
         for ix in range(ncat_men):
             sigma = sigma_x.copy()
@@ -741,7 +754,8 @@ if __name__ == "__main__":
             gradij_numeric[icoef] \
                 = (mus[0][iman, iwoman] - muij) / GRADIENT_STEP
             gradij_numeric_x0[icoef] = (mus[1][iman] - muij_x0) / GRADIENT_STEP
-            gradij_numeric_0y[icoef] = (mus[2][iwoman] - muij_0y) / GRADIENT_STEP
+            gradij_numeric_0y[icoef] = (
+                mus[2][iwoman] - muij_0y) / GRADIENT_STEP
             icoef += 1
         for iy in range(ncat_women):
             tau = tau_y.copy()
@@ -749,25 +763,30 @@ if __name__ == "__main__":
             mus, marg_err_x, marg_err_y = \
                 ipfp_heteroxy_solver(true_surplus_matrix, men_margins, women_margins,
                                      sigma_x, tau)
-            gradij_numeric[icoef] = (mus[0][iman, iwoman] - muij) / GRADIENT_STEP
+            gradij_numeric[icoef] = (
+                mus[0][iman, iwoman] - muij) / GRADIENT_STEP
             gradij_numeric_x0[icoef] = (mus[1][iman] - muij_x0) / GRADIENT_STEP
-            gradij_numeric_0y[icoef] = (mus[2][iwoman] - muij_0y) / GRADIENT_STEP
+            gradij_numeric_0y[icoef] = (
+                mus[2][iwoman] - muij_0y) / GRADIENT_STEP
             icoef += 1
 
         diff_gradients = gradij_numeric - gradij
         error_gradient = np.abs(diff_gradients)
 
-        describe_array(error_gradient, "error on the numerical gradient, heteroxy")
+        describe_array(
+            error_gradient, "error on the numerical gradient, heteroxy")
 
         diff_gradients_x0 = gradij_numeric_x0 - gradij_x0
         error_gradient_x0 = np.abs(diff_gradients_x0)
 
-        describe_array(error_gradient_x0, "error on the numerical gradient x0, heteroxy")
+        describe_array(error_gradient_x0,
+                       "error on the numerical gradient x0, heteroxy")
 
         diff_gradients_0y = gradij_numeric_0y - gradij_0y
         error_gradient_0y = np.abs(diff_gradients_0y)
 
-        describe_array(error_gradient_0y, "error on the numerical gradient 0y, heteroxy")
+        describe_array(error_gradient_0y,
+                       "error on the numerical gradient 0y, heteroxy")
 
     if do_test_gradient_hetero:
         tau = 1.0
@@ -785,7 +804,8 @@ if __name__ == "__main__":
             mus, marg_err_x, marg_err_y = \
                 ipfp_hetero_solver(true_surplus_matrix, men_marg, women_margins,
                                    tau)
-            gradij_numeric[icoef] = (mus[0][iman, iwoman] - muij) / GRADIENT_STEP
+            gradij_numeric[icoef] = (
+                mus[0][iman, iwoman] - muij) / GRADIENT_STEP
             icoef += 1
         for iy in range(ncat_women):
             women_marg = women_margins.copy()
@@ -793,7 +813,8 @@ if __name__ == "__main__":
             mus, marg_err_x, marg_err_y = \
                 ipfp_hetero_solver(true_surplus_matrix, men_margins, women_marg,
                                    tau)
-            gradij_numeric[icoef] = (mus[0][iman, iwoman] - muij) / GRADIENT_STEP
+            gradij_numeric[icoef] = (
+                mus[0][iman, iwoman] - muij) / GRADIENT_STEP
             icoef += 1
         for i1 in range(ncat_men):
             for i2 in range(ncat_women):
@@ -802,7 +823,8 @@ if __name__ == "__main__":
                 mus, marg_err_x, marg_err_y = \
                     ipfp_hetero_solver(surplus_mat, men_margins, women_margins,
                                        tau)
-                gradij_numeric[icoef] = (mus[0][iman, iwoman] - muij) / GRADIENT_STEP
+                gradij_numeric[icoef] = (
+                    mus[0][iman, iwoman] - muij) / GRADIENT_STEP
                 icoef += 1
         tau_plus = tau + GRADIENT_STEP
         mus, marg_err_x, marg_err_y = \
@@ -812,4 +834,5 @@ if __name__ == "__main__":
 
         error_gradient = np.abs(gradij_numeric - gradij)
 
-        describe_array(error_gradient, "error on the numerical gradient, hetero")
+        describe_array(
+            error_gradient, "error on the numerical gradient, hetero")
