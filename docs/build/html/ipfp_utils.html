@@ -38,6 +38,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Module estimate_cs_fuvl" href="estimate_cs_fuvl.html" />
     <link rel="prev" title="Module ipfp_solvers" href="ipfp_solvers.html" /> 
 </head>
 
@@ -84,9 +85,9 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="estimate_cs_fuvl.html">Module <code class="xref py py-mod docutils literal notranslate"><span class="pre">estimate_cs_fuvl</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="ipfp_solvers.html">Module <code class="xref py py-mod docutils literal notranslate"><span class="pre">ipfp_solvers</span></code></a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Module <code class="xref py py-mod docutils literal notranslate"><span class="pre">ipfp_utils</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="estimate_cs_fuvl.html">Module <code class="xref py py-mod docutils literal notranslate"><span class="pre">estimate_cs_fuvl</span></code></a></li>
 </ul>
 
             
@@ -158,53 +159,18 @@
 <span id="module-ipfp-utils"></span><h1>Module <a class="reference internal" href="#module-ipfp_utils" title="ipfp_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipfp_utils</span></code></a><a class="headerlink" href="#module-ipfp_utils" title="Permalink to this headline">¶</a></h1>
 <p>some utility programs used by ipfp_solvers</p>
 <dl class="py function">
-<dt id="ipfp_utils.der_npexp">
-<code class="sig-prename descclassname"><span class="pre">ipfp_utils.</span></code><code class="sig-name descname"><span class="pre">der_npexp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bigx</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">30.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="headerlink" href="#ipfp_utils.der_npexp" title="Permalink to this definition">¶</a></dt>
-<dd><p>derivative of <img class="math" src="_images/math/958a132deed102bf77b1cb9dff3bc10a525c892a.png" alt="C^2"/> extension of  <img class="math" src="_images/math/97f52240c7cf0d173d76a91b7e64def7c8d9a710.png" alt="\exp(a)"/> above <cite>bigx</cite></p>
+<dt id="ipfp_utils.print_stars">
+<code class="sig-prename descclassname"><span class="pre">ipfp_utils.</span></code><code class="sig-name descname"><span class="pre">print_stars</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">70</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#ipfp_utils.print_stars" title="Permalink to this definition">¶</a></dt>
+<dd><p>prints a starred line, or two around the title</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>arr</strong> (<em>np.array</em>) – a Numpy array</p></li>
-<li><p><strong>bigx</strong> (<em>float</em>) – upper bound</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – title</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – number of stars on line</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>derivative of  <img class="math" src="_images/math/97f52240c7cf0d173d76a91b7e64def7c8d9a710.png" alt="\exp(a)"/>  <img class="math" src="_images/math/958a132deed102bf77b1cb9dff3bc10a525c892a.png" alt="C^2"/>-extended above <cite>bigx</cite></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="ipfp_utils.der_nplog">
-<code class="sig-prename descclassname"><span class="pre">ipfp_utils.</span></code><code class="sig-name descname"><span class="pre">der_nplog</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1e-30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="headerlink" href="#ipfp_utils.der_nplog" title="Permalink to this definition">¶</a></dt>
-<dd><p>derivative of <img class="math" src="_images/math/958a132deed102bf77b1cb9dff3bc10a525c892a.png" alt="C^2"/> extension of  <img class="math" src="_images/math/76b9d4ee9b84393221acf6f6ee9ff56e297c769a.png" alt="\ln(a)"/> below <cite>eps</cite></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>arr</strong> (<em>np.array</em>) – a Numpy array</p></li>
-<li><p><strong>eps</strong> (<em>float</em>) – lower bound</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>derivative of  <img class="math" src="_images/math/76b9d4ee9b84393221acf6f6ee9ff56e297c769a.png" alt="\ln(a)"/> <img class="math" src="_images/math/958a132deed102bf77b1cb9dff3bc10a525c892a.png" alt="C^2"/>-extended below <cite>eps</cite></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="ipfp_utils.der_nppow">
-<code class="sig-prename descclassname"><span class="pre">ipfp_utils.</span></code><code class="sig-name descname"><span class="pre">der_nppow</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="headerlink" href="#ipfp_utils.der_nppow" title="Permalink to this definition">¶</a></dt>
-<dd><p>evaluates the derivatives in a and b of element-by-element a**b</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>np.array</em>) – </p></li>
-<li><p><strong>float</strong><strong>, </strong><strong>np.array</strong><strong>] </strong><strong>b</strong> (<em>Union</em><em>[</em><em>int</em><em>,</em>) – if an array,
-should have the same shape as <cite>a</cite></p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>a pair of two arrays of the same shape as <cite>a</cite></p>
+<dd class="field-even"><p>nothing</p>
 </dd>
 </dl>
 </dd></dl>
@@ -222,72 +188,6 @@ should have the same shape as <cite>a</cite></p></li>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>the <cite>scipy.stats.describe</cite> object</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="ipfp_utils.npexp">
-<code class="sig-prename descclassname"><span class="pre">ipfp_utils.</span></code><code class="sig-name descname"><span class="pre">npexp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bigx</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">30.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="headerlink" href="#ipfp_utils.npexp" title="Permalink to this definition">¶</a></dt>
-<dd><p><img class="math" src="_images/math/958a132deed102bf77b1cb9dff3bc10a525c892a.png" alt="C^2"/> extension of  <img class="math" src="_images/math/97f52240c7cf0d173d76a91b7e64def7c8d9a710.png" alt="\exp(a)"/> above <cite>bigx</cite></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>arr</strong> (<em>np.array</em>) – a Numpy array</p></li>
-<li><p><strong>bigx</strong> (<em>float</em>) – upper bound</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><img class="math" src="_images/math/97f52240c7cf0d173d76a91b7e64def7c8d9a710.png" alt="\exp(a)"/>  <img class="math" src="_images/math/958a132deed102bf77b1cb9dff3bc10a525c892a.png" alt="C^2"/>-extended above <cite>bigx</cite></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="ipfp_utils.nplog">
-<code class="sig-prename descclassname"><span class="pre">ipfp_utils.</span></code><code class="sig-name descname"><span class="pre">nplog</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1e-30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="headerlink" href="#ipfp_utils.nplog" title="Permalink to this definition">¶</a></dt>
-<dd><p><img class="math" src="_images/math/958a132deed102bf77b1cb9dff3bc10a525c892a.png" alt="C^2"/> extension of  <img class="math" src="_images/math/76b9d4ee9b84393221acf6f6ee9ff56e297c769a.png" alt="\ln(a)"/> below <cite>eps</cite></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>arr</strong> (<em>np.array</em>) – a Numpy array</p></li>
-<li><p><strong>eps</strong> (<em>float</em>) – lower bound</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><img class="math" src="_images/math/76b9d4ee9b84393221acf6f6ee9ff56e297c769a.png" alt="\ln(a)"/> <img class="math" src="_images/math/958a132deed102bf77b1cb9dff3bc10a525c892a.png" alt="C^2"/>-extended below <cite>eps</cite></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="ipfp_utils.npmaxabs">
-<code class="sig-prename descclassname"><span class="pre">ipfp_utils.</span></code><code class="sig-name descname"><span class="pre">npmaxabs</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="headerlink" href="#ipfp_utils.npmaxabs" title="Permalink to this definition">¶</a></dt>
-<dd><p>maximum absolute value in an array</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>arr</strong> (<em>np.array</em>) – Numpy array</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>a float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="ipfp_utils.nppow">
-<code class="sig-prename descclassname"><span class="pre">ipfp_utils.</span></code><code class="sig-name descname"><span class="pre">nppow</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="headerlink" href="#ipfp_utils.nppow" title="Permalink to this definition">¶</a></dt>
-<dd><p>evaluates a**b element-by-element</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>np.array</em>) – </p></li>
-<li><p><strong>float</strong><strong>, </strong><strong>np.array</strong><strong>] </strong><strong>b</strong> (<em>Union</em><em>[</em><em>int</em><em>,</em>) – if an array,
-should have the same shape as <cite>a</cite></p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>an array of the same shape as <cite>a</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -327,18 +227,119 @@ should have the same shape as <cite>a</cite></p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt id="ipfp_utils.print_stars">
-<code class="sig-prename descclassname"><span class="pre">ipfp_utils.</span></code><code class="sig-name descname"><span class="pre">print_stars</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">70</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#ipfp_utils.print_stars" title="Permalink to this definition">¶</a></dt>
-<dd><p>prints a starred line, or two around the title</p>
+<dt id="ipfp_utils.npmaxabs">
+<code class="sig-prename descclassname"><span class="pre">ipfp_utils.</span></code><code class="sig-name descname"><span class="pre">npmaxabs</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="headerlink" href="#ipfp_utils.npmaxabs" title="Permalink to this definition">¶</a></dt>
+<dd><p>maximum absolute value in an array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>arr</strong> (<em>np.array</em>) – Numpy array</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ipfp_utils.nplog">
+<code class="sig-prename descclassname"><span class="pre">ipfp_utils.</span></code><code class="sig-name descname"><span class="pre">nplog</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1e-30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="headerlink" href="#ipfp_utils.nplog" title="Permalink to this definition">¶</a></dt>
+<dd><p><img class="math" src="_images/math/958a132deed102bf77b1cb9dff3bc10a525c892a.png" alt="C^2"/> extension of  <img class="math" src="_images/math/76b9d4ee9b84393221acf6f6ee9ff56e297c769a.png" alt="\ln(a)"/> below <cite>eps</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>title</strong> (<em>str</em>) – title</p></li>
-<li><p><strong>n</strong> (<em>int</em>) – number of stars on line</p></li>
+<li><p><strong>arr</strong> (<em>np.array</em>) – a Numpy array</p></li>
+<li><p><strong>eps</strong> (<em>float</em>) – lower bound</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>nothing</p>
+<dd class="field-even"><p><img class="math" src="_images/math/76b9d4ee9b84393221acf6f6ee9ff56e297c769a.png" alt="\ln(a)"/> <img class="math" src="_images/math/958a132deed102bf77b1cb9dff3bc10a525c892a.png" alt="C^2"/>-extended below <cite>eps</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ipfp_utils.der_nplog">
+<code class="sig-prename descclassname"><span class="pre">ipfp_utils.</span></code><code class="sig-name descname"><span class="pre">der_nplog</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1e-30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="headerlink" href="#ipfp_utils.der_nplog" title="Permalink to this definition">¶</a></dt>
+<dd><p>derivative of <img class="math" src="_images/math/958a132deed102bf77b1cb9dff3bc10a525c892a.png" alt="C^2"/> extension of  <img class="math" src="_images/math/76b9d4ee9b84393221acf6f6ee9ff56e297c769a.png" alt="\ln(a)"/> below <cite>eps</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arr</strong> (<em>np.array</em>) – a Numpy array</p></li>
+<li><p><strong>eps</strong> (<em>float</em>) – lower bound</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>derivative of  <img class="math" src="_images/math/76b9d4ee9b84393221acf6f6ee9ff56e297c769a.png" alt="\ln(a)"/> <img class="math" src="_images/math/958a132deed102bf77b1cb9dff3bc10a525c892a.png" alt="C^2"/>-extended below <cite>eps</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ipfp_utils.npexp">
+<code class="sig-prename descclassname"><span class="pre">ipfp_utils.</span></code><code class="sig-name descname"><span class="pre">npexp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bigx</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">30.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="headerlink" href="#ipfp_utils.npexp" title="Permalink to this definition">¶</a></dt>
+<dd><p><img class="math" src="_images/math/958a132deed102bf77b1cb9dff3bc10a525c892a.png" alt="C^2"/> extension of  <img class="math" src="_images/math/97f52240c7cf0d173d76a91b7e64def7c8d9a710.png" alt="\exp(a)"/> above <cite>bigx</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arr</strong> (<em>np.array</em>) – a Numpy array</p></li>
+<li><p><strong>bigx</strong> (<em>float</em>) – upper bound</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><img class="math" src="_images/math/97f52240c7cf0d173d76a91b7e64def7c8d9a710.png" alt="\exp(a)"/>  <img class="math" src="_images/math/958a132deed102bf77b1cb9dff3bc10a525c892a.png" alt="C^2"/>-extended above <cite>bigx</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ipfp_utils.der_npexp">
+<code class="sig-prename descclassname"><span class="pre">ipfp_utils.</span></code><code class="sig-name descname"><span class="pre">der_npexp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bigx</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">30.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="headerlink" href="#ipfp_utils.der_npexp" title="Permalink to this definition">¶</a></dt>
+<dd><p>derivative of <img class="math" src="_images/math/958a132deed102bf77b1cb9dff3bc10a525c892a.png" alt="C^2"/> extension of  <img class="math" src="_images/math/97f52240c7cf0d173d76a91b7e64def7c8d9a710.png" alt="\exp(a)"/> above <cite>bigx</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arr</strong> (<em>np.array</em>) – a Numpy array</p></li>
+<li><p><strong>bigx</strong> (<em>float</em>) – upper bound</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>derivative of  <img class="math" src="_images/math/97f52240c7cf0d173d76a91b7e64def7c8d9a710.png" alt="\exp(a)"/>  <img class="math" src="_images/math/958a132deed102bf77b1cb9dff3bc10a525c892a.png" alt="C^2"/>-extended above <cite>bigx</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ipfp_utils.nppow">
+<code class="sig-prename descclassname"><span class="pre">ipfp_utils.</span></code><code class="sig-name descname"><span class="pre">nppow</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="headerlink" href="#ipfp_utils.nppow" title="Permalink to this definition">¶</a></dt>
+<dd><p>evaluates a**b element-by-element</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>np.array</em>) – </p></li>
+<li><p><strong>float</strong><strong>, </strong><strong>np.array</strong><strong>] </strong><strong>b</strong> (<em>Union</em><em>[</em><em>int</em><em>,</em>) – if an array,
+should have the same shape as <cite>a</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an array of the same shape as <cite>a</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ipfp_utils.der_nppow">
+<code class="sig-prename descclassname"><span class="pre">ipfp_utils.</span></code><code class="sig-name descname"><span class="pre">der_nppow</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="headerlink" href="#ipfp_utils.der_nppow" title="Permalink to this definition">¶</a></dt>
+<dd><p>evaluates the derivatives in a and b of element-by-element a**b</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>np.array</em>) – </p></li>
+<li><p><strong>float</strong><strong>, </strong><strong>np.array</strong><strong>] </strong><strong>b</strong> (<em>Union</em><em>[</em><em>int</em><em>,</em>) – if an array,
+should have the same shape as <cite>a</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a pair of two arrays of the same shape as <cite>a</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -351,6 +352,7 @@ should have the same shape as <cite>a</cite></p></li>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="estimate_cs_fuvl.html" class="btn btn-neutral float-right" title="Module estimate_cs_fuvl" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="ipfp_solvers.html" class="btn btn-neutral float-left" title="Module ipfp_solvers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
@@ -358,7 +360,7 @@ should have the same shape as <cite>a</cite></p></li>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2020, Bernard Salanie.
+        &#169; Copyright 2021, Bernard Salanie.
 
     </p>
   </div>

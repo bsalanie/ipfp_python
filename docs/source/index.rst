@@ -6,6 +6,6 @@ Documentation for package ipfp_python
    :maxdepth: 2
 
 
-   estimate_cs_fuvl
    ipfp_solvers
    ipfp_utils
+   estimate_cs_fuvl

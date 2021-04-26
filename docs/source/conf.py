@@ -1,7 +1,7 @@
 """ My configuration file for the Sphinx documentation builder.
 
     This file only contains a selection of the most common options. 
-    For a fulllist see the documentation:
+    For a full list see the documentation:
      https://www.sphinx-doc.org/en/master/usage/configuration.html
 """
 
@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath(f'../../../{package_name}'))
 # -- Project information -----------------------------------------------------
 
 project = package_name
-copyright = '2020, Bernard Salanie'
+copyright = '2021, Bernard Salanie'
 author = 'Bernard Salanie'
 
 # The full version, including alpha/beta/rc tags
@@ -34,6 +34,7 @@ release = '1.0.0'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx_rtd_theme',
     'sphinx.ext.napoleon',
     'sphinx.ext.imgmath',
 ]
@@ -47,16 +48,22 @@ extensions = [
 exclude_patterns = []
 
 
+# for import that does not work
+autodoc_mock_imports = ['altair', 'altair_saver', 'vega_datasets']
+
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-#html_theme = 'classic'
-#html_theme = 'alabaster'
+# html_theme = 'classic'
+# html_theme = 'alabaster'
 html_theme = 'sphinx_rtd_theme'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 #html_static_path = ['_static']
+
+autodoc_member_order = 'bysource'
+autodoc_content = 'both'

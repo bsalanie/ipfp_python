@@ -39,7 +39,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Module ipfp_utils" href="ipfp_utils.html" />
-    <link rel="prev" title="Module estimate_cs_fuvl" href="estimate_cs_fuvl.html" /> 
+    <link rel="prev" title="Documentation for package ipfp_python" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -85,9 +85,9 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="estimate_cs_fuvl.html">Module <code class="xref py py-mod docutils literal notranslate"><span class="pre">estimate_cs_fuvl</span></code></a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Module <code class="xref py py-mod docutils literal notranslate"><span class="pre">ipfp_solvers</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="ipfp_utils.html">Module <code class="xref py py-mod docutils literal notranslate"><span class="pre">ipfp_utils</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="estimate_cs_fuvl.html">Module <code class="xref py py-mod docutils literal notranslate"><span class="pre">estimate_cs_fuvl</span></code></a></li>
 </ul>
 
             
@@ -171,6 +171,62 @@ in several variants of the <a class="reference external" href="https://www.jstor
 returns the equilibrium matching patterns, the adding-up errors on the margins,
 and if requested (gr=True) the derivatives of the matching patterns in all primitives.</p>
 <dl class="py function">
+<dt id="ipfp_solvers.ipfp_homo_nosingles_solver">
+<code class="sig-prename descclassname"><span class="pre">ipfp_solvers.</span></code><code class="sig-name descname"><span class="pre">ipfp_homo_nosingles_solver</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">men_margins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">women_margins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-09</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipfp_solvers.ipfp_homo_nosingles_solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>solve for equilibrium in a Choo and Siow market without singles</p>
+<p>given systematic surplus and margins</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Phi</strong> (<em>np.array</em>) – matrix of systematic surplus, shape (ncat_men, ncat_women)</p></li>
+<li><p><strong>men_margins</strong> (<em>np.array</em>) – vector of men margins, shape (ncat_men)</p></li>
+<li><p><strong>women_margins</strong> (<em>np.array</em>) – vector of women margins, shape (ncat_women)</p></li>
+<li><p><strong>tol</strong> (<em>float</em>) – tolerance on change in solution</p></li>
+<li><p><strong>gr</strong> (<em>boolean</em>) – if True, also evaluate derivatives of muxy wrt Phi</p></li>
+<li><p><strong>verbose</strong> (<em>boolean</em>) – prints stuff</p></li>
+<li><p><strong>maxiter</strong> (<em>int</em>) – maximum number of iterations</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>muxy the matching patterns, shape (ncat_men, ncat_women)</p></li>
+<li><p>marg_err_x, marg_err_y the errors on the margins</p></li>
+<li><p>and the gradients of muxy wrt Phi if gr=True</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ipfp_solvers.ipfp_homo_solver">
+<code class="sig-prename descclassname"><span class="pre">ipfp_solvers.</span></code><code class="sig-name descname"><span class="pre">ipfp_homo_solver</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">men_margins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">women_margins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-09</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipfp_solvers.ipfp_homo_solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>solve for equilibrium in a Choo and Siow market</p>
+<p>given systematic surplus and margins</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Phi</strong> (<em>np.array</em>) – matrix of systematic surplus, shape (ncat_men, ncat_women)</p></li>
+<li><p><strong>men_margins</strong> (<em>np.array</em>) – vector of men margins, shape (ncat_men)</p></li>
+<li><p><strong>women_margins</strong> (<em>np.array</em>) – vector of women margins, shape (ncat_women)</p></li>
+<li><p><strong>tol</strong> (<em>float</em>) – tolerance on change in solution</p></li>
+<li><p><strong>gr</strong> (<em>boolean</em>) – if True, also evaluate derivatives of muxy wrt Phi</p></li>
+<li><p><strong>verbose</strong> (<em>boolean</em>) – prints stuff</p></li>
+<li><p><strong>maxiter</strong> (<em>int</em>) – maximum number of iterations</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>(muxy, mux0, mu0y) the matching patterns</p></li>
+<li><p>marg_err_x, marg_err_y the errors on the margins</p></li>
+<li><p>and the gradients of (muxy, mux0, mu0y) wrt (men_margins, women_margins, Phi) if gr=True</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="ipfp_solvers.ipfp_hetero_solver">
 <code class="sig-prename descclassname"><span class="pre">ipfp_solvers.</span></code><code class="sig-name descname"><span class="pre">ipfp_hetero_solver</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">men_margins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">women_margins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-09</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipfp_solvers.ipfp_hetero_solver" title="Permalink to this definition">¶</a></dt>
 <dd><p>solve for equilibrium in a  in a gender-heteroskedastic Choo and Siow market</p>
@@ -231,60 +287,9 @@ and if requested (gr=True) the derivatives of the matching patterns in all primi
 </dd></dl>
 
 <dl class="py function">
-<dt id="ipfp_solvers.ipfp_homo_nosingles_solver">
-<code class="sig-prename descclassname"><span class="pre">ipfp_solvers.</span></code><code class="sig-name descname"><span class="pre">ipfp_homo_nosingles_solver</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">men_margins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">women_margins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-09</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipfp_solvers.ipfp_homo_nosingles_solver" title="Permalink to this definition">¶</a></dt>
-<dd><p>solve for equilibrium in a Choo and Siow market without singles</p>
-<p>given systematic surplus and margins</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>Phi</strong> (<em>np.array</em>) – matrix of systematic surplus, shape (ncat_men, ncat_women)</p></li>
-<li><p><strong>men_margins</strong> (<em>np.array</em>) – vector of men margins, shape (ncat_men)</p></li>
-<li><p><strong>women_margins</strong> (<em>np.array</em>) – vector of women margins, shape (ncat_women)</p></li>
-<li><p><strong>tol</strong> (<em>float</em>) – tolerance on change in solution</p></li>
-<li><p><strong>gr</strong> (<em>boolean</em>) – if True, also evaluate derivatives of muxy wrt Phi</p></li>
-<li><p><strong>verbose</strong> (<em>boolean</em>) – prints stuff</p></li>
-<li><p><strong>maxiter</strong> (<em>int</em>) – maximum number of iterations</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p>muxy the matching patterns, shape (ncat_men, ncat_women)</p></li>
-<li><p>marg_err_x, marg_err_y the errors on the margins</p></li>
-<li><p>and the gradients of muxy wrt Phi if gr=True</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="ipfp_solvers.ipfp_homo_solver">
-<code class="sig-prename descclassname"><span class="pre">ipfp_solvers.</span></code><code class="sig-name descname"><span class="pre">ipfp_homo_solver</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">men_margins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">women_margins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-09</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipfp_solvers.ipfp_homo_solver" title="Permalink to this definition">¶</a></dt>
-<dd><p>solve for equilibrium in a Choo and Siow market</p>
-<p>given systematic surplus and margins</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>Phi</strong> (<em>np.array</em>) – matrix of systematic surplus, shape (ncat_men, ncat_women)</p></li>
-<li><p><strong>men_margins</strong> (<em>np.array</em>) – vector of men margins, shape (ncat_men)</p></li>
-<li><p><strong>women_margins</strong> (<em>np.array</em>) – vector of women margins, shape (ncat_women)</p></li>
-<li><p><strong>tol</strong> (<em>float</em>) – tolerance on change in solution</p></li>
-<li><p><strong>gr</strong> (<em>boolean</em>) – if True, also evaluate derivatives of muxy wrt Phi</p></li>
-<li><p><strong>verbose</strong> (<em>boolean</em>) – prints stuff</p></li>
-<li><p><strong>maxiter</strong> (<em>int</em>) – maximum number of iterations</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p>(muxy, mux0, mu0y) the matching patterns</p></li>
-<li><p>marg_err_x, marg_err_y the errors on the margins</p></li>
-<li><p>and the gradients of (muxy, mux0, mu0y) wrt (men_margins, women_margins, Phi) if gr=True</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
+<dt id="ipfp_solvers.print_simulated_ipfp">
+<code class="sig-prename descclassname"><span class="pre">ipfp_solvers.</span></code><code class="sig-name descname"><span class="pre">print_simulated_ipfp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">muxy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marg_err_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marg_err_y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipfp_solvers.print_simulated_ipfp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 
@@ -295,14 +300,14 @@ and if requested (gr=True) the derivatives of the matching patterns in all primi
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="ipfp_utils.html" class="btn btn-neutral float-right" title="Module ipfp_utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="estimate_cs_fuvl.html" class="btn btn-neutral float-left" title="Module estimate_cs_fuvl" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Documentation for package ipfp_python" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2020, Bernard Salanie.
+        &#169; Copyright 2021, Bernard Salanie.
 
     </p>
   </div>
