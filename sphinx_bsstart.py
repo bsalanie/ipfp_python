@@ -6,6 +6,11 @@ from pathlib import Path
 import shutil
 
 
+def make_dir_if_not_exists(path: Path):
+    if not path.exists():
+        Path.mkdir(path)
+
+
 def make_script_rst_(script, source_dir):
     n_chars = len("Module: mod:") + len(script) + 2
     chars_line = '='*n_chars
@@ -14,29 +19,34 @@ def make_script_rst_(script, source_dir):
 
 .. automodule:: {script}
    :members:
+   :undoc-members:
+   :show-inheritance:
     """
     with open(f"{source_dir}/{script}.rst", "w") as f:
         f.write(rst_contents)
 
 
 @click.command()
-@click.argument("package_name")
-@click.argument("scripts", nargs=-1)
-def main(package_name, scripts):
+def main():
+    package_name = Path.cwd().stem
+
+    with open("modules_todoc.txt", "r") as f:
+        scripts = [l.strip('\n') for l in f.readlines()]
+    
 
     GIT_HOME = Path.home() / "Documents" / "Github"
 
-    BSCONF_SPHINX = GIT_HOME / "ipfp_python" / "sphinx_conf_bs.py"
-    BSMAKE_SPHINX = GIT_HOME / "ipfp_python" / "Sphinx_Makefile"
+    BSCONF_SPHINX = GIT_HOME / "sphinx_conf_bs.py"
+    BSMAKE_SPHINX = GIT_HOME / "Sphinx_Makefile"
 
     CURDIR = Path.cwd()
 
     docs_dir = CURDIR / "docs"
-    Path.mkdir(docs_dir)
+    make_dir_if_not_exists(docs_dir)
     source_dir = docs_dir / "source"
-    Path.mkdir(source_dir)
+    make_dir_if_not_exists(source_dir)
     build_dir = docs_dir / "build"
-    Path.mkdir(build_dir)
+    make_dir_if_not_exists(build_dir)
 
     shutil.copy(BSCONF_SPHINX, source_dir / "conf.py")
     conf_filename = str(source_dir / "conf.py")
@@ -70,6 +80,12 @@ Documentation for package {package_name}
 
     with open(f"{index_rst_file}", "w") as f:
         f.write(index_file_contents)
+
+    # create script to build docs
+    build_docs_contents = "import os\n\n" + "os.system('make clean')\n" \
+        + "os.system('make html')\n"
+    with open(docs_dir / "build_docs.py", "w") as f:
+        f.write(build_docs_contents)
 
 
 if __name__ == "__main__":
